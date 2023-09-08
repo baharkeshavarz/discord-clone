@@ -7,3 +7,10 @@
 npx  shadcn-ui@latest init
 install elements:
 npx shadcn-ui@latest add button
+
+## Using prisma
+npx i -D prisma
+npx prisma init
+npx prisma generate
+npx prisma db push
+npx prisma studio
