@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 
-// user this lib across the server-side components
+// use this lib across the server-side components
 export const currentProfile = async () => {
     const { userId } = auth();
     if (!userId) {
