@@ -14,3 +14,5 @@ npx prisma init
 npx prisma generate
 npx prisma db push
 npx prisma studio
+
+4:28
