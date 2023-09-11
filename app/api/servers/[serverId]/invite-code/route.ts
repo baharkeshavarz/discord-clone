@@ -28,7 +28,7 @@ export async function PATCH(
           }
         });
     
-     return  NextResponse.json(server)
+     return NextResponse.json(server)
 
     } catch (error) {
         console.log("[SERVER_ERROR]", error);
