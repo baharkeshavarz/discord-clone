@@ -11,7 +11,7 @@ import { useModal } from "@/hooks/use-modal-store";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Check, Copy, RefreshCcw, icons } from "lucide-react";
+import { Check, Copy, RefreshCcw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useOrigin } from "@/hooks/use-origin";
 import axios from "axios";

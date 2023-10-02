@@ -3,7 +3,6 @@ import { db } from '@/lib/db';
 import { initialProfile } from '@/lib/initial-profile';
 import { redirectToSignIn } from '@clerk/nextjs';
 import { redirect } from "next/navigation";
-
 import React from 'react'
 
  const SetupPage = async () => {

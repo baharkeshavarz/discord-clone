@@ -29,7 +29,7 @@ export const LeaveServerModal = () => {
       
       onClose();
       router.refresh();
-      router.push("/")
+      router.push("/");
      } catch (error) {
        setIsLoading(false)
        console.log(error)

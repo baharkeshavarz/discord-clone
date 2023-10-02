@@ -28,8 +28,8 @@ export const DeleteServerModal = () => {
       await axios.delete(`/api/servers/${server?.id}`);
       
       onClose();
-      router.push("/")
       router.refresh();
+      router.push("/");
      } catch (error) {
        setIsLoading(false)
        console.log(error)
@@ -65,7 +65,6 @@ export const DeleteServerModal = () => {
                disabled={isLoading}
                variant="primary"
                onClick={onConfrim}
-
             >
               Confirm
             </Button>

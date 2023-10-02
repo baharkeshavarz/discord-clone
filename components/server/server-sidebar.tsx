@@ -17,7 +17,7 @@ export const ServerSidebar = async ( { serverId } : ServerSidebarProps) => {
 
   const server = await db.server.findUnique({
      where: {
-        id: serverId,
+        id: parseInt(serverId),
      },
      include: {
         channels: {
@@ -47,7 +47,7 @@ export const ServerSidebar = async ( { serverId } : ServerSidebarProps) => {
 
   const role = server.members.find(member => member.profileId === profile.id)?.role;
   return (
-    <div className="flex flex-col h-full text-primary w-full dark:bg-[#2B2D31] bg-[#F2F3F5]">
+    <div className="flex flex-col h-full text-primary w-full dark:bg-[#2B2D31] bg-[#F2F3F5]">11111
           <ServerHeader
               server={server}
               role={role}

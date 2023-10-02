@@ -13,7 +13,6 @@ import {
 import { ChevronDown, LogOut, PlusCircle, Settings, Trash, UserPlus, Users } from 'lucide-react';
 import { ServerWithMembersWithProfiles } from '@/types';
 import { useModal } from '@/hooks/use-modal-store';
-import { on } from 'events';
 
 interface ServerHeaderProps {
     server: ServerWithMembersWithProfiles;

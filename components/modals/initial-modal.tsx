@@ -61,8 +61,7 @@ export const InitialModal = () => {
        await axios.post("/api/servers", values)
        form.reset();
        router.refresh();
-  
-       //  router.refresh(): Refresh the current route. Making a new request to the server,
+      //   router.refresh(): Refresh the current route. Making a new request to the server,
       //   re-fetching data requests, and re-rendering Server Components. 
       //   The client will merge the updated React Server Component payload without losing unaffected 
       //   client-side React (e.g. useState) or browser state (e.g. scroll position).

@@ -109,7 +109,6 @@ export const EditServerModal = () => {
                   )}
                 />
               </div>
-
               <FormField
                 control={form.control}
                 name="name"

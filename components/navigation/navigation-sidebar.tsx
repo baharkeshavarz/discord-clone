@@ -31,7 +31,7 @@ export const NavigationSidebar = async () => {
            {servers.map(server => (
                <div key={server.id} className="mb-3 py-1">
                    <NavigationItem
-                      id= {server.id}
+                      id= {server.id.toString()}
                       name= {server.name}
                       imageUrl= {server.imageUrl}
                     />
