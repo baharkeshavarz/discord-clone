@@ -1,8 +1,6 @@
 # Fullstack Discord Clone: Next.js 13, React, Socket.io, Prisma, Tailwind, MySQL
 
 
-
-
 ## Using shadcn
 npx  shadcn-ui@latest init
 install elements:
@@ -13,6 +11,4 @@ npx i -D prisma
 npx prisma init
 npx prisma generate
 npx prisma db push
-npx prisma studio
-
-4:28
+npx prisma studio  //open the prisma database in browser
