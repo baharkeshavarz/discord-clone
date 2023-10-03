@@ -24,10 +24,14 @@ const ServerMember = ({
 }: ServerMemberProps) => {
   const router = useRouter();
   const params= useParams();
-  const icon = roleIconMap[member.role]  
+  const icon = roleIconMap[member.role]
+  const onClick = () => {
+     router.push(`/servers/${server.id}/conversations/${member.id}`)
+  }
 
   return (
     <button 
+       onClick={onClick}
        className={cn(
         "group px-2 py-2 rounded-md flex items-center gap-x-2 w-full hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition mb-1",
         params?.memberId === member.id.toString() && "bg-zinc-700/20 dark:bg-zinc-700"
