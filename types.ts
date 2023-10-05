@@ -1,9 +1,11 @@
 import { Server, Member, Profile } from '@prisma/client';
+import { NextApiResponse } from 'next';
+import { Socket, Server as NetServer } from 'net';
+import { Server as SocketIOServer} from "socket.io"
 
 export type ServerWithMembersWithProfiles = Server & {
     members: (Member & {profile: Profile}) [];
 }
-
 /*
 Here's an example of how you might use this type:
 
@@ -20,5 +22,12 @@ const myServer: ServerWithMembersWithProfiles = {
         // More members...
     ]
 };
-
 */
+
+export type NextApiResponseServerIo = NextApiResponse & {
+    socket: Socket & {
+        server: NetServer & {
+            io: SocketIOServer,
+        }
+    }
+}
