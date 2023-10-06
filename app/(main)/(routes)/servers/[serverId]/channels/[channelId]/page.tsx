@@ -1,4 +1,5 @@
 import ChatHeader from '@/components/chat/chat-header';
+import ChatInput from '@/components/chat/chat-input';
 import { currentProfile } from '@/lib/current-profile';
 import { db } from '@/lib/db';
 import { redirectToSignIn } from '@clerk/nextjs';
@@ -41,6 +42,16 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
           type="channel"
           name={channel.name}
           serverId={channel.serverId.toString()}
+      />
+      <div className="flex-1">Furure Messages</div>
+      <ChatInput
+         name={channel.name}
+         apiUrl="/api/socket/messages"
+         query={{
+            channelId: channel.id,
+            serverId: channel.serverId,
+          }}
+         type="channel"
       />
     </div>
   )
