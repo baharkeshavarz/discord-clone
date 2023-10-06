@@ -13,7 +13,7 @@ export async function DELETE(
             }
        
             // Delete the server
-            const  serverId = params.serverId;
+            const serverId = params.serverId;
             const server = await db.server.delete({
                 where: {
                     profileId: profile.id,
@@ -26,6 +26,7 @@ export async function DELETE(
             return new NextResponse("Internal Error", { status: 500 })
          }
 }
+
 export async function PATCH(
     req: Request,
     { params } : { params: { serverId: string}}

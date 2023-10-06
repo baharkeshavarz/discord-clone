@@ -13,7 +13,7 @@ import { Input } from "../ui/input";
 import { Plus, Smile } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import qs from "query-string";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface ChatInputProps {
     apiUrl: string;
@@ -33,6 +33,8 @@ const ChatInput = ({
     name,
     type,
 }: ChatInputProps) => {
+
+  const { onOpen } = useModal();
  const router = useRouter();
  //<z.infer<typeof formSchema>>:: extract type   
  const form = useForm<z.infer<typeof formSchema>>({
@@ -45,7 +47,7 @@ const ChatInput = ({
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-        axios.post(`${apiUrl}?serverId=${query.serverId}&channelId=${query.channelId}`, values);
+        await axios.post(`${apiUrl}?serverId=${query.serverId}&channelId=${query.channelId}`, values);
         form.reset();
         router.refresh();
     } catch (error) {
@@ -64,6 +66,7 @@ const ChatInput = ({
                       <FormControl>
                          <div className="relative p-4 pb-6">
                             <button 
+                               onClick={() => onOpen("messageFile", { apiUrl, query })}
                                type="button"
                                className="absolute top-7 left-8 w-[24px] h-[24px] bg-zinc-400 dark:bg-zinc-400
                                         hover:bg-zinc-600dark:hover:bg-zinc-300 rounded-full p-1 flex items-center"
