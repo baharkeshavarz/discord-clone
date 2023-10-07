@@ -21,11 +21,9 @@ export default async function handler(
     if (!content) {
         return res.status(400).json({ error: "Content is missing"})
     }
-
     if (!serverId) {
         return res.status(400).json({ error: "Server ID is missing"})
     }
-
     if (!channelId) {
         return res.status(400).json({ error: "Channel ID is missing"})
     }
