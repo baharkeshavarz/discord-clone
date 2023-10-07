@@ -21,6 +21,7 @@ import { Button } from '../ui/button';
 import qs from "query-string";
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useModal } from '@/hooks/use-modal-store';
 
 interface ChatItemProsp {
     id: string;
@@ -69,7 +70,7 @@ export const ChatItem = ({
   const isImage = !isPDF && fileUrl;
 
   const [isEditting, setIsEditting] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
+  const { onOpen } = useModal();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -225,11 +226,15 @@ export const ChatItem = ({
                )}
                 <ActionTooltip label="Delete">
                    <Trash 
+                     onClick={() => onOpen("deleteMessage", {
+                         apiUrl: `/${socketUrl}/${id}`,
+                         query: socketQuery,
+                     })}
                      className="cursor-pointer w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300"
                    />
                 </ActionTooltip>
-          </div>
-        )}
+            </div>
+           )}
     </div>
   )
 }
