@@ -20,7 +20,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import qs from "query-string";
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useModal } from '@/hooks/use-modal-store';
 
 interface ChatItemProsp {
@@ -68,6 +68,8 @@ export const ChatItem = ({
   const canEditMessage = !deleted && isOwner && !fileUrl;
   const isPDF = fileType === "pdf" && fileUrl;
   const isImage = !isPDF && fileUrl;
+  const router = useRouter();
+  const params = useParams();
 
   const [isEditting, setIsEditting] = useState(false)
   const { onOpen } = useModal();
@@ -110,18 +112,30 @@ export const ChatItem = ({
         console.log(error)
      }
    }
+
+   const onMemberClick = () => {
+     if (member.id === currentMember.id) {
+       return null;
+     }
+
+     router.push(`/servers/${params?.serverId}/conversations/${member.id}`);
+   }
  
   return (
     <div className="relative group flex items-center hover:bg-black/5 p-4 transition w-full">
         <div className="group flex items-start gap-x-2 w-full">
-           <div className="cursor-poniter hover:drop-shadow-md transition">
-              <UserAvatar src={member.profile.imageUrl} />
+           <div onClick={onMemberClick} className="cursor-poniter hover:drop-shadow-md transition">
+              <UserAvatar
+                  src={member.profile.imageUrl}
+                />
            </div>
 
            <div className="flex flex-col w-full">
               <div className="flex items-center">
                    <div className="flex items-center gap-x-2">
-                    <p onClick={() => {}} className="font-semibold text-sm hover:underline cursor-pointer">
+                    <p
+                        onClick={onMemberClick}
+                        className="font-semibold text-sm hover:underline cursor-pointer">
                        {member.profile.name}
                      </p>
                     <ActionTooltip label={member.role}>
