@@ -8,6 +8,7 @@ import { Loader2, ServerCrash } from 'lucide-react';
 import { MessageWithMemberWithProfile } from '@/types';
 import { ChatItem } from './chat-item';
 import { format } from "date-fns";
+import { useChatSocket } from '@/hooks/use-chat-socket';
 
 interface ChatMessagesProps {
     name: string;
@@ -35,6 +36,9 @@ export const ChatMessages = ({
 
   const DATE_FORMAT = "d MMM yyyy, HH:SS"
   const queryKey = `chat:${chatId}`;
+  const addKey = `chat:${chatId}:messages`;
+  const updateKey = `chat:${chatId}:messages:update`;
+
   const {
     data,
     fetchNextPage,
@@ -47,6 +51,8 @@ export const ChatMessages = ({
       paramKey,
       paramValue,
   });
+
+  useChatSocket({ queryKey, addKey, updateKey })
 
   if (status === "loading") {
     return <div className="flex-1 flex justify-center items-center flex-col">
@@ -65,7 +71,7 @@ export const ChatMessages = ({
         </p>
     </div>
   }
- console.log(data?.pages);
+
   return (
     <div className="flex-1 flex flex-col py-6 overflow-y-auto">
        <div className="flex-1"/>
@@ -73,7 +79,7 @@ export const ChatMessages = ({
               type={type}
               name={name}
           />
-        {data?.pages.map((group, i) => (
+        {data?.pages?.map((group, i) => (
            <Fragment key={i}>
                {group.items.map((message: MessageWithMemberWithProfile) => (
                  <div key={message.id} className="flex-1">
