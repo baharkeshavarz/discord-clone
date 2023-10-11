@@ -1,18 +1,19 @@
 import { auth } from "@clerk/nextjs";
+
 import { db } from "@/lib/db";
 
-// use this lib across the server-side components
 export const currentProfile = async () => {
-    const { userId } = auth();
-    if (!userId) {
-        return null;
+  const { userId } = auth();
+
+  if (!userId) {
+    return null;
+  }
+
+  const profile = await db.profile.findUnique({
+    where: {
+      userId
     }
+  });
 
-    const profile = db.profile.findUnique({
-        where: {
-            userId
-        }
-    });
-
-    return profile;
+  return profile;
 }

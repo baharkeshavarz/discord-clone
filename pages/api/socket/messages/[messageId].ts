@@ -32,7 +32,7 @@ export default async function handler(
 
     const server = await db.server.findFirst({
       where: {
-        id: parseInt(serverId as string),
+        id: serverId as string,
         members: {
           some: {
             profileId: profile.id,
@@ -50,8 +50,8 @@ export default async function handler(
 
     const channel = await db.channel.findFirst({
       where: {
-        id: parseInt(channelId as string),
-        serverId: parseInt(serverId as string),
+        id: channelId as string,
+        serverId: serverId as string,
       },
     });
   
@@ -67,8 +67,8 @@ export default async function handler(
 
     let message = await db.message.findFirst({
       where: {
-        id: parseInt(messageId as string),
-        channelId: parseInt(channelId as string),
+        id: messageId as string,
+        channelId: channelId as string,
       },
       include: {
         member: {
@@ -95,7 +95,7 @@ export default async function handler(
     if (req.method === "DELETE") {
       message = await db.message.update({
         where: {
-          id: parseInt(messageId as string),
+          id: messageId as string,
         },
         data: {
           fileUrl: null,
@@ -119,7 +119,7 @@ export default async function handler(
 
       message = await db.message.update({
         where: {
-          id: parseInt(messageId as string),
+          id: messageId as string,
         },
         data: {
           content,
@@ -134,8 +134,8 @@ export default async function handler(
       })
     }
 
-    // emit is a method provided by socket.io to send events. It takes the event name (in this case, updateKey) and the data (message) as arguments.
     const updateKey = `chat:${channelId}:messages:update`;
+
     res?.socket?.server?.io?.emit(updateKey, message);
 
     return res.status(200).json(message);

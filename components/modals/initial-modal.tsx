@@ -14,7 +14,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
 import {
   Form,
   FormControl,
@@ -23,7 +22,6 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
@@ -40,6 +38,7 @@ const formSchema = z.object({
 
 export const InitialModal = () => {
   const [isMounted, setIsMounted] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -57,17 +56,15 @@ export const InitialModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-     try {
-       await axios.post("/api/servers", values)
-       form.reset();
-       router.refresh();
-      //   router.refresh(): Refresh the current route. Making a new request to the server,
-      //   re-fetching data requests, and re-rendering Server Components. 
-      //   The client will merge the updated React Server Component payload without losing unaffected 
-      //   client-side React (e.g. useState) or browser state (e.g. scroll position).
-     } catch (error) {
-       console.log(error);
-     }
+    try {
+      await axios.post("/api/servers", values);
+
+      form.reset();
+      router.refresh();
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   if (!isMounted) {
@@ -130,7 +127,7 @@ export const InitialModal = () => {
               />
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
-              <Button variant="primary" disabled={isLoading} className="w-full">
+              <Button variant="primary" disabled={isLoading}>
                 Create
               </Button>
             </DialogFooter>

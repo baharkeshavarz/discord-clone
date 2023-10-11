@@ -1,9 +1,11 @@
 "use client";
 
+import qs from "query-string";
 import axios from "axios";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { ChannelType } from "@prisma/client";
 
 import {
   Dialog,
@@ -12,7 +14,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
 import {
   Form,
   FormControl,
@@ -21,62 +22,73 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
-import { ChannelType } from "@prisma/client";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import { useEffect } from "react";
 
 const formSchema = z.object({
   name: z.string().min(1, {
     message: "Channel name is required."
   }).refine(
-     name => name !== "general",
-     {
-       message: "Channel name cannot be 'general'"
-     }
+    name => name !== "general",
+    {
+      message: "Channel name cannot be 'general'"
+    }
   ),
   type: z.nativeEnum(ChannelType)
 });
 
 export const CreateChannelModal = () => {
+  const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
   const params = useParams();
-  const { isOpen, onClose, type, data } = useModal();
-  const { channelType } = data;
 
+  const isModalOpen = isOpen && type === "createChannel";
+  const { channelType } = data;
+ 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-       name: "",
-       type: channelType || ChannelType.TEXT,
+      name: "",
+      type: channelType || ChannelType.TEXT,
     }
   });
 
-  // For using in creating special channel, the default should be selected 
   useEffect(() => {
-    if (channelType){
-      form.setValue("type", channelType)
+    if (channelType) {
+      form.setValue("type", channelType);
     } else {
-      form.setValue("type", ChannelType.TEXT)
+      form.setValue("type", ChannelType.TEXT);
     }
-  }, [channelType, form])
+  }, [channelType, form]);
 
   const isLoading = form.formState.isSubmitting;
-  const isModalOpen = isOpen && type === "createChannel";
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-     try {
-       await axios.post(`/api/channels?serverId=${params.serverId}`, values)
-       form.reset();
-       onClose();
-       router.refresh();
-     } catch (error) {  
-       console.log(error);
-     }
+    try {
+      const url = qs.stringifyUrl({
+        url: "/api/channels",
+        query: {
+          serverId: params?.serverId
+        }
+      });
+      await axios.post(url, values);
+
+      form.reset();
+      router.refresh();
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const handleClose = () => {
@@ -117,7 +129,6 @@ export const CreateChannelModal = () => {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="type"
@@ -154,7 +165,7 @@ export const CreateChannelModal = () => {
               />
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
-              <Button variant="primary" disabled={isLoading} className="w-full">
+              <Button variant="primary" disabled={isLoading}>
                 Create
               </Button>
             </DialogFooter>

@@ -1,40 +1,23 @@
-import { Server, Member, Profile, Message } from '@prisma/client';
-import { NextApiResponse } from 'next';
-import { Socket, Server as NetServer } from 'net';
-import { Server as SocketIOServer} from "socket.io"
+import { Server as NetServer, Socket } from "net";
+import { NextApiResponse } from "next";
+import { Server as SocketIOServer } from "socket.io";
+import { Server, Member, Profile } from "@prisma/client"
+import { Message } from "postcss";
 
 export type ServerWithMembersWithProfiles = Server & {
-    members: (Member & {profile: Profile}) [];
-}
+  members: (Member & { profile: Profile })[];
+};
 
 export type MessageWithMemberWithProfile = Message & {
-    member: Member & {
-      profile: Profile
-    }
+  member: Member & {
+    profile: Profile
   }
-
-/*
-Here's an example of how you might use this type:
-
-import { ServerWithMembersWithProfiles } from './path-to-your-types';
-const myServer: ServerWithMembersWithProfiles = {
-    // Server properties...
-    members: [
-        {
-            // Member properties...
-            profile: {
-                // Profile properties...
-            }
-        },
-        // More members...
-    ]
-};
-*/
+}
 
 export type NextApiResponseServerIo = NextApiResponse & {
-    socket: Socket & {
-        server: NetServer & {
-            io: SocketIOServer,
-        }
-    }
-}
+  socket: Socket & {
+    server: NetServer & {
+      io: SocketIOServer;
+    };
+  };
+};

@@ -1,7 +1,7 @@
-import { useSocket } from "@/components/providers/socket.provider";
-import { MessageWithMemberWithProfile } from "@/types";
-import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSocket } from "@/components/providers/socket-provider";
+import { MessageWithMemberWithProfile } from "@/types";
 
 type ChatSocketProps = {
   addKey: string;
@@ -10,72 +10,73 @@ type ChatSocketProps = {
 }
 
 export const useChatSocket = ({
-    addKey,
-    updateKey,
-    queryKey,
+  addKey,
+  updateKey,
+  queryKey
 }: ChatSocketProps) => {
-    const { socket } = useSocket();
-    const queryClient = useQueryClient();
+  const { socket } = useSocket();
+  const queryClient = useQueryClient();
 
-    useEffect(() => {
-        if (!socket) {
-          return;
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+
+    socket.on(updateKey, (message: MessageWithMemberWithProfile) => {
+      queryClient.setQueryData([queryKey], (oldData: any) => {
+        if (!oldData || !oldData.pages || oldData.pages.length === 0) {
+          return oldData;
         }
-        socket.on(updateKey, (message: MessageWithMemberWithProfile) => {
-          queryClient.setQueryData([queryKey], (oldData: any) => {
-            if (!oldData || !oldData.pages || oldData.pages.length === 0) {
-              return oldData;
-            }
-    
-            const newData = oldData.pages.map((page: any) => {
-              return {
-                ...page,
-                items: page.items.map((item: MessageWithMemberWithProfile) => {
-                  if (item.id === message.id) {
-                    return message;
-                  }
-                  return item;
-                })
+
+        const newData = oldData.pages.map((page: any) => {
+          return {
+            ...page,
+            items: page.items.map((item: MessageWithMemberWithProfile) => {
+              if (item.id === message.id) {
+                return message;
               }
-            });
-    
-            return {
-              ...oldData,
-              pages: newData,
-            }
-          })
+              return item;
+            })
+          }
         });
 
-        socket.on(addKey, (message: MessageWithMemberWithProfile) => {
-           queryClient.setQueriesData([queryKey], (oldData: any) => {
-              if (!oldData || !oldData.pages || oldData.pages.length === 0) {
-                  return {
-                    pages: [{
-                        items: [message]
-                    }]
-                  }
-              }
+        return {
+          ...oldData,
+          pages: newData,
+        }
+      })
+    });
 
-              const newData = [...oldData.pages]
-              newData[0] = {
-                ...newData[0],
-                items: [
-                    message,
-                    ...newData[0].items,
-                ]
-              }
+    socket.on(addKey, (message: MessageWithMemberWithProfile) => {
+      queryClient.setQueryData([queryKey], (oldData: any) => {
+        if (!oldData || !oldData.pages || oldData.pages.length === 0) {
+          return {
+            pages: [{
+              items: [message],
+            }]
+          }
+        }
 
-              return {
-                 ...oldData,
-                 pages: newData,
-              }
-           })
-        })
-    
-        return () => {
-            socket.off(updateKey)
-            socket.off(addKey)
-        } 
+        const newData = [...oldData.pages];
 
-      }, [queryClient, addKey, queryKey, socket, updateKey]);
+        newData[0] = {
+          ...newData[0],
+          items: [
+            message,
+            ...newData[0].items,
+          ]
+        };
+
+        return {
+          ...oldData,
+          pages: newData,
+        };
+      });
+    });
+
+    return () => {
+      socket.off(addKey);
+      socket.off(updateKey);
     }
+  }, [queryClient, addKey, queryKey, socket, updateKey]);
+}

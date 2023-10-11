@@ -13,7 +13,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
 import {
   Form,
   FormControl,
@@ -22,7 +21,6 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
@@ -39,8 +37,11 @@ const formSchema = z.object({
 });
 
 export const CreateServerModal = () => {
-  const router = useRouter();
   const { isOpen, onClose, type } = useModal();
+  const router = useRouter();
+
+  const isModalOpen = isOpen && type === "createServer";
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,17 +51,17 @@ export const CreateServerModal = () => {
   });
 
   const isLoading = form.formState.isSubmitting;
-  const isModalOpen = isOpen && type === "createServer";
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-     try {
-       await axios.post("/api/servers", values)
-       form.reset();
-       onClose();
-       router.refresh();
-     } catch (error) {
-       console.log(error);
-     }
+    try {
+      await axios.post("/api/servers", values);
+
+      form.reset();
+      router.refresh();
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const handleClose = () => {
@@ -124,7 +125,7 @@ export const CreateServerModal = () => {
               />
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
-              <Button variant="primary" disabled={isLoading} className="w-full">
+              <Button variant="primary" disabled={isLoading}>
                 Create
               </Button>
             </DialogFooter>

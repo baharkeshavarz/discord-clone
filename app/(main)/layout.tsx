@@ -1,25 +1,20 @@
-import React from 'react'
-import { NavigationSidebar } from '@/components/navigation/navigation-sidebar';
+import { NavigationSidebar } from "@/components/navigation/navigation-sidebar";
 
 const MainLayout = async ({
-       children,
-       params
-      } : {
-         children: React.ReactNode,
-         params: { serverId: string }
-        }) => {
-
-  return (
+  children
+}: {
+  children: React.ReactNode;
+}) => {
+  return ( 
     <div className="h-full">
-        <div className="hidden md:flex h-full w-[72px] fixed inset-y-0 flex-col z-30">
-             <NavigationSidebar/>
-        </div>
-
-        <main className="h-full md:ml-[72px]">
-          {children}
-        </main>
+      <div className="hidden md:flex h-full w-[72px] z-30 flex-col fixed inset-y-0">
+        <NavigationSidebar />
+      </div>
+      <main className="md:pl-[72px] h-full">
+        {children}
+      </main>
     </div>
-  )
+   );
 }
-
+ 
 export default MainLayout;
